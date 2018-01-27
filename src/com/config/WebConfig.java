@@ -1,5 +1,6 @@
 package com.config;
 
+import javax.inject.Scope;
 import javax.servlet.MultipartConfigElement;
 
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.dao.SpitterDao;
+import com.dao.SpittleDao;
 
 @Configuration
 @EnableWebMvc
@@ -37,7 +39,11 @@ public class WebConfig extends WebMvcConfigurerAdapter{
 	@Bean
 	public SpitterDao spdao(){
 		return	new SpitterDao();
-		
+	}
+	
+	@Bean(initMethod="init",destroyMethod="destroy")
+	public SpittleDao spldao(){
+		return new SpittleDao();
 	}
 	
 	/*@Bean

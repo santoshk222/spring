@@ -17,18 +17,18 @@ public class HibernateUtilities {
 	static {
 
 		try {
-			System.out.println("hiibernateUtilities");
+			System.out.println("HibernateUtilities--Entered");
 			Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
 			serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
 			
 			configuration.addAnnotatedClass(Spitter.class);
 			
 			sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-			System.out.println("session factory..");
+			System.out.println("HibernateUtilities--completed");
 
 		} catch (HibernateException e) {
 			e.printStackTrace();
-			System.out.println("Problem creating session factory: " + e);
+			System.out.println("HibernateUtilities--Problem creating session factory: " + e.getMessage());
 		}
 	}
 

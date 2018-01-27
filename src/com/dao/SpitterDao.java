@@ -9,13 +9,12 @@ import spittr.Spitter;
 import spittr.Spittle;
 
 public class SpitterDao {
-	public SpitterDao() {
-		System.out.println("SpitterDao class");
-	}
-	
 	SessionFactory factory=HibernateUtilities.getsSessionFactory();
 	Session session;
 	
+	public SpitterDao() {
+		/*System.out.println("SpitterDao--Constructor()");*/
+	}
 	
 	public Spitter SaveSpitter(Spitter spitter){
 		session=factory.openSession();

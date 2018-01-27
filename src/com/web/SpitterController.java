@@ -4,6 +4,8 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,14 +24,15 @@ import spittr.Spitter;
 
 @Controller
 @RequestMapping({"/spitter"})
-public class SpitterController {
+public class SpitterController implements InitializingBean , DisposableBean{
 	@Autowired(required=false)
-	private SpitterDao dao;
+	private SpitterDao sprdao;
 	
+	@Autowired HttpSession sess;
 	
 	private static final org.slf4j.Logger log=LoggerFactory.getLogger(Spitter.class.getName());
 	
-	@Autowired HttpSession sess;
+	
 
 
 	@RequestMapping(value="/register",method=RequestMethod.GET)
@@ -45,7 +48,7 @@ public class SpitterController {
 			System.out.println("Error: ");
 			return "registerForm";
 		}
-		dao.SaveSpitter(spitter);
+		sprdao.SaveSpitter(spitter);
 		log.info("Spitter registered : "+spitter.getId());
 		System.out.println("Spitter ID: "+spitter.getId());
 		return "redirect:/";
@@ -65,7 +68,7 @@ public class SpitterController {
 	
 	@RequestMapping(value="showlogin",method=RequestMethod.POST)
 	public String dologin(Spitter spitter,RedirectAttributes model){
-		Spitter newSpitter=dao.findSpitter(spitter);
+		Spitter newSpitter=sprdao.findSpitter(spitter);
 		if(newSpitter.getId()> (-1)){
 			sess.setAttribute("spitterLogged", "loggedin");
 			sess.setAttribute("spitter", newSpitter);
@@ -83,6 +86,18 @@ public class SpitterController {
 		sess.invalidate();
 		log.info("user logged out");
 		return "redirect:/spitter/showlogin";
+	}
+
+	@Override
+	public void destroy() throws Exception {
+		System.out.println("spitterController--destroy()");
+		
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		System.out.println("spitterController--afterPropertiesSet()");
+		
 	}
 	
 	
